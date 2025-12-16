@@ -3,10 +3,10 @@
 
 static inline void uart_putc(const char c)
 {
-    volatile uintptr_t uart = 0x09000000;
-    while (((*(uintptr_t *)uart + 0x018) >> 5 ) & 1)
+    uintptr_t uart = 0x09000000;
+    while ((*((volatile uint32_t *)(uart + 0x018)) >> 5 ) & 1)
         ;
-    *(uintptr_t *)uart = c;
+    *(volatile uint32_t *)uart = c;
     return;
 
 }
@@ -23,15 +23,15 @@ static void panic(const char *msg)
 {
     uart_putc('\n');
     uart_puts(msg);
-    while (1) ;
+    for (; ;) ;
 }
 
 void kernel_main(void) {
     /* Perhaps write to uart? */
-    char *str = "hi";
+   // char *str = "hi";
     uart_putc('a');
-    uart_puts("Hello World! From my kernel!");
-    uart_putc('\n');
-    uart_puts(str);
-    panic("Next instruction not found");
+   // uart_puts("Hello World! From my shashi bitch kernel!");
+    //uart_putc('\n');
+//    uart_puts(str);
+  //  panic("Next instruction not found");
 }
