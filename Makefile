@@ -1,7 +1,7 @@
 CC = gcc
 
 CFLAGS = -Wall -Wextra -ffreestanding -fno-stack-protector \
-         -fno-pic -fno-pie -mgeneral-regs-only -O2
+         -fno-pic -fno-pie -mgeneral-regs-only -O0
 LDFLAGS = -nostdlib -Wl,-Tlinker.ld -Wl,-no-pie
 
 all: kernel8.elf

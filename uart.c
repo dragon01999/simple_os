@@ -17,22 +17,35 @@ void uart_puts(const char *str)
     return;
 }
 
-void print_hex(int hex)
+void print_hex(uint32_t num)
 {
-    int size = sizeof(int) * 2;
-    char buff[size + 1];
-    buff[size] = '\0';
-    int q = hex, r = 0, i = size - 1;
-    while (i >= 0) {
-        r = q % 16;
-        q /= 16;
-        buff[i] = (r < 10) ? r + 48 : (r - 10) + 65;
-        i--;
-    }
-    uart_puts("0x");
-    uart_puts(buff);
+        int size = sizeof(uint32_t) * 2;
+        char str_hex[size + 1];
+        str_hex[size] = '\0';
+        int r = 0;
+        for (int i = size - 1; i >= 0; i--) {
+                r = num % 16;
+                num >>= 4;
+                str_hex[i] = (r < 10) ? r + '0' : (r - 10) + 'a';
+        }
+        uart_puts("0x");
+        uart_puts(str_hex);
 }
 
+void print_hex64(uint64_t num)
+{
+        int size = sizeof(uint64_t) * 2;
+        char str_hex[size + 1];
+        str_hex[size] = '\0';
+        int r = 0;
+        for (int i = size - 1; i >= 0; i--) {
+                r = num % 16;
+                num >>= 4;
+                str_hex[i] = (r < 10) ? r + '0' : (r - 10) + 'a';
+        }
+        uart_puts("0x");
+        uart_puts(str_hex);
+}
 /* For now panic will reside here */
 void panic(const char *msg)
 {
@@ -40,4 +53,3 @@ void panic(const char *msg)
     uart_puts(msg);
     for (;;);
 }
-
