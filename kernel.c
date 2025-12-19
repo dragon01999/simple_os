@@ -23,13 +23,26 @@ void kernel_main(void) {
     uart_putc('\n');
     print_hex((uint32_t)&k);
     uart_putc('\n');
-    print_hex64((uint64_t)&h);
-	uint64_t bss, _stp;
+	uint64_t bss, bss_end, vect, stp, vec;
 	__asm__ __volatile("ldr %x0, =__bss_start \n"
-            :"=r"(bss)
+            "ldr %x2, =__bss_end \n"
+            "ldr %x1, =__interrupt_vect \n"
+            "ldr %x4, =_vec \n"
+            "ldr %x3, =__kernel_top \n"
+            :"=r"(bss), "=r"(vect), "=r"(bss_end), "=r"(stp), "=r"(vec)
             :
             );
     uart_puts("\n __bss_top: ");
     print_hex64(bss);
+    uart_puts("\n __bss_end: ");
+    print_hex64(bss_end);
+    uart_puts("\n stp: ");
+    print_hex64(stp);
+    uart_puts("\n vect: ");
+    print_hex64(vect);
+    uart_puts("\n vec: ");
+    print_hex64(vec);
+    __asm__ __volatile__ (".inst 0x00000000");
+
 	panic("Next instruction not found!\n");
 }

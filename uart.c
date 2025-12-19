@@ -53,3 +53,9 @@ void panic(const char *msg)
     uart_puts(msg);
     for (;;);
 }
+
+void panik(void)
+{
+    uart_puts("working...\n");
+    return;
+}
