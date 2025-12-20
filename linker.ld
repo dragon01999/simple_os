@@ -11,8 +11,7 @@ SECTIONS {
 	.vectors : ALIGN(2048)
 	{
 		__interrupt_vect = .;
-        _vec = .;
-		*(.vectors)
+		KEEP(*(.vectors))
 	}
 	.rodata : ALIGN(8)
 	{

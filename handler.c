@@ -9,6 +9,11 @@ static void die(const char *fmt)
 
 void __handle_sync(void)
 {
+    uart_puts("\n esr_el1: ");
+    uint64_t esr_val;
+    __asm__ volatile("mrs %0, esr_el1" : "=r" (esr_val));
+    print_hex(((uint32_t)esr_val) >> 26);
+    return;
 	die("Sync exception triggered\n");
 }
 
@@ -22,7 +27,7 @@ void __handle_fiq(void)
 	die("Fiq exception triggered\n");
 }
 
-void __handle_syserror(void)
+void __handle_sys_err(void)
 {
 	/* lol not that my system might work :> */
 	die("Fatal: Syserror exception trigger\n");

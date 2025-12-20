@@ -9,7 +9,7 @@ void __handle_irq(void);
 
 void __handle_fiq(void);
 
-void __handle_syserror(void);
+void __handle_sys_err(void);
 
 void __handle_illegal_exception(void);
 

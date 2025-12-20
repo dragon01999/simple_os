@@ -23,13 +23,14 @@ void kernel_main(void) {
     uart_putc('\n');
     print_hex((uint32_t)&k);
     uart_putc('\n');
-	uint64_t bss, bss_end, vect, stp, vec;
+	uint64_t bss, bss_end, vect, stp, spsel, vbar;
 	__asm__ __volatile("ldr %x0, =__bss_start \n"
             "ldr %x2, =__bss_end \n"
             "ldr %x1, =__interrupt_vect \n"
-            "ldr %x4, =_vec \n"
             "ldr %x3, =__kernel_top \n"
-            :"=r"(bss), "=r"(vect), "=r"(bss_end), "=r"(stp), "=r"(vec)
+            "mrs %x4, spsel \n"
+            "mrs %x5, vbar_el1\n"
+            :"=r"(bss), "=r"(vect), "=r"(bss_end), "=r"(stp), "=r"(spsel), "=r"(vbar)
             :
             );
     uart_puts("\n __bss_top: ");
@@ -40,9 +41,14 @@ void kernel_main(void) {
     print_hex64(stp);
     uart_puts("\n vect: ");
     print_hex64(vect);
-    uart_puts("\n vec: ");
-    print_hex64(vec);
-    __asm__ __volatile__ (".inst 0x00000000");
+    uart_puts("\n spsel: ");
+    print_hex64(spsel);
+    uart_puts("\n vbar: ");
+    print_hex64(vbar);
+    __asm__ __volatile__ ("brk #1");
+    uart_puts("\n back here");
+    __asm__ __volatile__(".inst 00000000");
+    __asm__ __volatile__("svc #0");
 
 	panic("Next instruction not found!\n");
 }

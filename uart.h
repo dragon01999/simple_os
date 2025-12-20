@@ -11,6 +11,4 @@ void print_hex64(uint64_t num);
 
 void panic(const char *msg);
 
-void panik(void);
-
 #endif
