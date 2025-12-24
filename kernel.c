@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include "ktypes.h"
 #include "uart.h"
 
 void memset(char *buffer, char c, int size)
@@ -17,11 +17,11 @@ void kernel_main(void) {
         print_hex((int)&buff[i]);
     }
 	uart_putc('\n');
-    print_hex((uint32_t )&kernel_main);
+    print_hex((u32 )&kernel_main);
     uart_putc('\n');
-    print_hex((uint32_t)&buff);
+    print_hex((u32)&buff);
     uart_putc('\n');
-    print_hex((uint32_t)&k);
+    print_hex((u32)&k);
     uart_putc('\n');
 	uint64_t bss, bss_end, vect, stp, spsel, vbar;
 	__asm__ __volatile("ldr %x0, =__bss_start \n"
@@ -47,6 +47,8 @@ void kernel_main(void) {
     print_hex64(vbar);
     __asm__ __volatile__ ("brk #1");
     uart_puts("\n back here");
+    uart_puts("\n val: ");
+    print_hex(7897);
     __asm__ __volatile__(".inst 00000000");
     __asm__ __volatile__("svc #0");
 

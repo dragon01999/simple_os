@@ -1,12 +1,12 @@
-#include <stdint.h>
+#include "ktypes.h"
 #include "uart.h"
 
 void uart_putc(const char c)
 {
     uintptr_t uart = 0x09000000;
-    while ((*((volatile uint32_t *)(uart + 0x018)) >> 5 ) & 1)
+    while ((*((volatile u32 *)(uart + 0x018)) >> 5 ) & 1)
         ;
-    *(volatile uint32_t *)uart = c;
+    *(volatile u32 *)uart = c;
     return;
 }
 
@@ -17,34 +17,36 @@ void uart_puts(const char *str)
     return;
 }
 
-void print_hex(uint32_t num)
+void print_hex(u32 num)
 {
-        int size = sizeof(uint32_t) * 2;
-        char str_hex[size + 1];
-        str_hex[size] = '\0';
-        int r = 0;
-        for (int i = size - 1; i >= 0; i--) {
-                r = num % 16;
-                num >>= 4;
-                str_hex[i] = (r < 10) ? r + '0' : (r - 10) + 'a';
-        }
-        uart_puts("0x");
-        uart_puts(str_hex);
+    char *hex = "0123456789abcdef";
+    int size = sizeof(u32) * 2;
+    char str_hex[size + 1];
+    str_hex[size] = '\0';
+    int r = 0;
+    for (int i = size - 1; i >= 0; i--) {
+        r = num & 0xf;
+        num >>= 4;
+        str_hex[i] = hex[r];
+    }
+    uart_puts("0x");
+    uart_puts(str_hex);
 }
 
-void print_hex64(uint64_t num)
+void print_hex64(u64 num)
 {
-        int size = sizeof(uint64_t) * 2;
-        char str_hex[size + 1];
-        str_hex[size] = '\0';
-        int r = 0;
-        for (int i = size - 1; i >= 0; i--) {
-                r = num % 16;
-                num >>= 4;
-                str_hex[i] = (r < 10) ? r + '0' : (r - 10) + 'a';
-        }
-        uart_puts("0x");
-        uart_puts(str_hex);
+    char *hex = "0123456789abcdef";
+    int size = sizeof(u64) * 2;
+    char str_hex[size + 1];
+    str_hex[size] = '\0';
+    int r = 0;
+    for (int i = size - 1; i >= 0; i--) {
+    	r = num & 0xf;
+        num >>= 4;
+        str_hex[i] = hex[r];
+    }
+    uart_puts("0x");
+    uart_puts(str_hex);
 }
 /* For now panic will reside here */
 void panic(const char *msg)

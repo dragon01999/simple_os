@@ -1,6 +1,8 @@
 #ifndef _HANDLER_H
 #define _HANDLER_H
 
+#include "ktypes.h"
+
 static void die(const char *fmt);
 
 void __handle_sync(void);

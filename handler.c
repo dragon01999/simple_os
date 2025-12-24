@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include "ktypes.h"
 #include "uart.h"
 #include "handler.h"
 
@@ -10,9 +10,9 @@ static void die(const char *fmt)
 void __handle_sync(void)
 {
     uart_puts("\n esr_el1: ");
-    uint64_t esr_val;
+    u64 esr_val;
     __asm__ volatile("mrs %0, esr_el1" : "=r" (esr_val));
-    print_hex(((uint32_t)esr_val) >> 26);
+    print_hex(((u32)esr_val) >> 26);
     return;
 	die("Sync exception triggered\n");
 }
