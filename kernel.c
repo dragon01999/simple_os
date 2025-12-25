@@ -1,5 +1,6 @@
 #include "ktypes.h"
 #include "uart.h"
+#include "rtc_pl031.h"
 
 void memset(char *buffer, char c, int size)
 {
@@ -11,7 +12,6 @@ void memset(char *buffer, char c, int size)
 char buff[9] = {'H', 'E', 'F', 'O', 't', '6', '7', '\0', '9'};
 void kernel_main(void) {
 	uart_puts("Hello, World. From my kernel!\n");
-    int k = 27008299;
     for (int i = 0; i < 9; i++) {
         uart_putc('\n');
         print_hex((int)&buff[i]);
@@ -20,8 +20,6 @@ void kernel_main(void) {
     print_hex((u32 )&kernel_main);
     uart_putc('\n');
     print_hex((u32)&buff);
-    uart_putc('\n');
-    print_hex((u32)&k);
     uart_putc('\n');
 	uint64_t bss, bss_end, vect, stp, spsel, vbar;
 	__asm__ __volatile("ldr %x0, =__bss_start \n"
@@ -45,12 +43,27 @@ void kernel_main(void) {
     print_hex64(spsel);
     uart_puts("\n vbar: ");
     print_hex64(vbar);
+
+    struct tm time;
+    init_rtc();
+    /* Mask the rtc interrupt */
+    set_interrupt_to(1);
+    write_time_into(&time);
+    uart_putc('\n');
+    print_dec(time.year);
+    uart_putc('\t');
+    print_dec(time.mon);
+    uart_putc('\n');
+    print_dec(time.day);
+    uart_putc('\t');
+    print_dec(time.hr);
+    uart_putc('\n');
+    print_dec(time.min);
+    uart_putc('\t');
+    print_dec(time.sec);
     __asm__ __volatile__ ("brk #1");
     uart_puts("\n back here");
-    uart_puts("\n val: ");
-    print_hex(7897);
-    __asm__ __volatile__(".inst 00000000");
-    __asm__ __volatile__("svc #0");
-
+    uart_putc('\n');
+    print_dec(0);
 	panic("Next instruction not found!\n");
 }

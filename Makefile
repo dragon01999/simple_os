@@ -6,7 +6,7 @@ LDFLAGS = -nostdlib -Wl,-Tlinker.ld -Wl,-no-pie
 
 all: kernel8.elf
 
-kernel8.elf: boot.o vect_table.o uart.o handler.o kernel.o
+kernel8.elf: boot.o vect_table.o uart.o rtc_pl031.o handler.o kernel.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 boot.o: boot.S

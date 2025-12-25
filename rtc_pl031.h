@@ -3,9 +3,9 @@
 
 #include "ktypes.h"
 
-struct time {
+struct tm {
     u32 year;
-    u32 month;
+    u32 mon;
     u32 day;
     u32 hr;
     u32 min;
@@ -15,6 +15,8 @@ struct time {
 void init_rtc(void);
 
 int set_interrupt_to(int state);
+
+void write_time_into(struct tm *time);
 
 void set_time(uint32_t unix_epoch_sec);
 
