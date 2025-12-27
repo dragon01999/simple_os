@@ -61,9 +61,8 @@ void kernel_main(void) {
     print_dec(time.min);
     uart_putc('\t');
     print_dec(time.sec);
-    __asm__ __volatile__ ("brk #1");
-    uart_puts("\n back here");
-    uart_putc('\n');
-    print_dec(0);
+    
+	__asm__ __volatile__ ("brk #1");
+    uart_puts("Hello World \n");
 	panic("Next instruction not found!\n");
 }

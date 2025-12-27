@@ -22,7 +22,8 @@ static void print_num(const char *num)
     int i;
     for (i = 0; num[i] == '0'; i++)
         ;
-    i = (num[i] == '\0') ? i - 1 : i; 
+    i = (num[i] == '\0') ? i - 1 : i;
+	i = (i < 0) ? 0 : i;
     uart_puts(&num[i]);
 }
 

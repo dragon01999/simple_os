@@ -9,7 +9,7 @@ static void die(const char *fmt)
 
 void __handle_sync(void)
 {
-    uart_puts("\n esr_el1: ");
+    uart_puts("\nesr_el1: ");
     u64 esr_val;
     __asm__ volatile("mrs %0, esr_el1" : "=r" (esr_val));
     print_hex(((u32)esr_val) >> 26);

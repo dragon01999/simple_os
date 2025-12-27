@@ -1,19 +1,19 @@
 CC = gcc
 
 CFLAGS = -Wall -Wextra -ffreestanding -fno-stack-protector \
-         -fno-pic -fno-pie -mgeneral-regs-only -O0
+         -fno-pic -fno-pie -mgeneral-regs-only -O2
 LDFLAGS = -nostdlib -Wl,-Tlinker.ld -Wl,-no-pie
 
 all: kernel8.elf
 
-kernel8.elf: boot.o vect_table.o uart.o rtc_pl031.o handler.o kernel.o
+kernel8.elf: boot.o head.o uart.o rtc_pl031.o handler.o kernel.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
 boot.o: boot.S
 	$(CC) -c boot.S $(CFLAGS)
 
-vect_table.o: vect_table.S
-	$(CC) -c vect_table.S $(CFLAGS)
+head.o: head.S
+	$(CC) -c head.S $(CFLAGS)
 
 kernel.o: kernel.c
 	$(CC) -c kernel.c $(CFLAGS)
